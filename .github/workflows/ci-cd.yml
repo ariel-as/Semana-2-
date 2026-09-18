@@ -27,7 +27,7 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Ejecutar pruebas
         run: npm test
@@ -40,7 +40,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Habilitar GitHub Pages (fuente: GitHub Actions)
+      - name: "Habilitar GitHub Pages (fuente: GitHub Actions)"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |

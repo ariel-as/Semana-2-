@@ -5,7 +5,9 @@ const {
   esNombreValido,
   esCorreoValido,
   esTelefonoValido,
-  esClaveValida
+  esClaveValida,
+  esTerminosValida,
+  validarCampo
 } = require("../app.js");
 
 test("esNombreValido acepta nombres de 3 o más letras", () => {
@@ -51,4 +53,37 @@ test("esClaveValida acepta contraseñas de 8 o más caracteres", () => {
 test("esClaveValida rechaza contraseñas cortas o vacías", () => {
   assert.strictEqual(esClaveValida("abc"), false);
   assert.strictEqual(esClaveValida(""), false);
+});
+
+test("esTerminosValida solo acepta true", () => {
+  assert.strictEqual(esTerminosValida(true), true);
+  assert.strictEqual(esTerminosValida(false), false);
+  assert.strictEqual(esTerminosValida(undefined), false);
+  assert.strictEqual(esTerminosValida("true"), false);
+});
+
+test("validarCampo marca el campo como válido cuando el validador pasa", () => {
+  const input = {
+    id: "nombre",
+    value: "Ariel Alejandro",
+    setCustomValidity(msg) {
+      this._msg = msg;
+    }
+  };
+  const valido = validarCampo(input, esNombreValido, "Error de prueba");
+  assert.strictEqual(valido, true);
+  assert.strictEqual(input._msg, "");
+});
+
+test("validarCampo marca el campo como inválido cuando el validador falla", () => {
+  const input = {
+    id: "correo",
+    value: "correo-invalido",
+    setCustomValidity(msg) {
+      this._msg = msg;
+    }
+  };
+  const valido = validarCampo(input, esCorreoValido, "Correo inválido");
+  assert.strictEqual(valido, false);
+  assert.strictEqual(input._msg, "Correo inválido");
 });
